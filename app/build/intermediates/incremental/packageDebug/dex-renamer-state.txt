@@ -1,0 +1,7 @@
+#Wed Jan 04 21:44:05 ICT 2017
+base.0=/Users/admin/Android Project/Messaging/AutoDetectApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_358e6c3b214dbb68c13e142d12daba77effc47f0
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=/Users/admin/Android Project/Messaging/AutoDetectApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_1701422fb45a68910d00bb2c0427e6cb389bf3df/classes.dex
+base.1=/Users/admin/Android Project/Messaging/AutoDetectApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_1701422fb45a68910d00bb2c0427e6cb389bf3df
+file.0=/Users/admin/Android Project/Messaging/AutoDetectApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_358e6c3b214dbb68c13e142d12daba77effc47f0/classes.dex
