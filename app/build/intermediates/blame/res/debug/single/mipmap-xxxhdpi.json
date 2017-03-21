@@ -2,5 +2,9 @@
     {
         "merged": "/Users/admin/Android Project/Messaging/AutoDetectApp/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi/ic_launcher.png",
         "source": "/Users/admin/Android Project/Messaging/AutoDetectApp/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/admin/AndroidProject/Messaging/AutoDetectApp/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi/ic_launcher.png",
+        "source": "/Users/admin/AndroidProject/Messaging/AutoDetectApp/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
     }
 ]
