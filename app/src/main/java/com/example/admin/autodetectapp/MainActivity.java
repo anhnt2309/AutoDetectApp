@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.logging.Logger;
+
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
     Intent serviceIntent;
@@ -36,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         final TextView name = (TextView) findViewById(R.id.txt_packageName);
         final TextView time = (TextView) findViewById(R.id.txt_time);
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
 
         Button btn_run = (Button) findViewById(R.id.btn_execute);
         Button btn_stop = (Button) findViewById(R.id.btn_stop);
@@ -60,8 +61,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     return;
                 }
                 checkLocationPermission();
+//                Location  location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                Log.e("Latitude",""+location.getLatitude());
+//                Log.e("Longtitude",""+location.getLongitude());
 
-
+                startService(serviceIntent);
 
 
 //                int Time = Integer.parseInt(time.getText().toString());
@@ -206,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, MainActivity.this);
+                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
                 } else {
 

@@ -7,6 +7,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -37,6 +40,7 @@ public class DetectService extends Service {
     private LocationManager mLocationManager;
     private LocationListener mLocationListener;
 
+    private  Timer timer;
 
     private static final String TAG = "DetectService";
 
@@ -81,14 +85,15 @@ public class DetectService extends Service {
         notificationManager.notify(0, noti);
 
         // get info from activity
-        final String name = intent.getStringExtra("name");
+//        final String name = intent.getStringExtra("name");
+        final String name = "com.google.android.apps.maps";
         int time = intent.getIntExtra("time", 1);
 
         // begin to detect app
         final String str = "";
 
 
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
 
@@ -108,32 +113,44 @@ public class DetectService extends Service {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 2*60*1000, locationListener);
+                Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Log.e("Latitude",""+location.getLatitude());
+                Log.e("Longtitude",""+location.getLongitude());
+                String copyString = ""+location.getLatitude()+location.getLongitude();
 
 
 
-//                ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-//                List<ActivityManager.RunningServiceInfo> runningAppProcessInfo = am.getRunningServices(Integer.MAX_VALUE);
-//                Log.d("size", "" + runningAppProcessInfo.size());
-//                for (ActivityManager.RunningServiceInfo appProcess : runningAppProcessInfo) {
-//                    if (appProcess.process.equals(name) == true) {
-//                        flag = 1;
-//                        if (appProcess.foreground == false) {
-//                            Log.d(str, name + "has been launched");
-//                        }
-//                    } else {
-//                        flag = 0;
-//                    }
-//                }
-//                if (flag != 1) {
-//                    Log.d(str, name + " not running");
+                ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                List<ActivityManager.RunningServiceInfo> runningAppProcessInfo = am.getRunningServices(Integer.MAX_VALUE);
+                Log.d("size", "" + runningAppProcessInfo.size());
+                for (ActivityManager.RunningServiceInfo appProcess : runningAppProcessInfo) {
+                    if (appProcess.process.equals(name) == true) {
+                        flag = 1;
+                        if (appProcess.foreground == false) {
+                            Log.d(str, name + "has been launched");
+                        }
+                    } else {
+                        flag = 0;
+                    }
+                }
+                if (flag != 1) {
+                    Log.d(str, name + " not running");
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?q="+location.getLatitude()+","+location.getLongitude());
+
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                        mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(mapIntent);
+                    }
 //                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(name);
 //                    if (launchIntent != null) {
+//
 //                        startActivity(launchIntent);//null pointer check in case package name was not found
 //                    }
-//                }
+                }
             }
-        }, 0, (time * 60 * 1000));
+        }, 0, ( 1*60*1000));
         return START_STICKY;
     }
 
@@ -141,6 +158,7 @@ public class DetectService extends Service {
     public void onDestroy() {
         super.onDestroy();
         notificationManager.cancelAll();
+        timer.cancel();
         Toast.makeText(this, "Stop Service", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Stop Service");
     }
